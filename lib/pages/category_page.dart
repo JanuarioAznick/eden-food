@@ -52,18 +52,37 @@ class CategoryPage extends StatelessWidget {
   }
 
   Widget _buildFooter(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 12),
-      color: Color(0xFF8B4C39),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(onPressed: () => context.go('/home'), icon: Icon(Icons.home, color: Colors.white)),
-          IconButton(onPressed: () => context.go('/categorias'), icon: Icon(Icons.category, color: Colors.white)),
-          IconButton(onPressed: () => context.go('/carrinho'), icon: Icon(Icons.shopping_cart, color: Colors.white)),
-          IconButton(onPressed: () => context.go('/perfil'), icon: Icon(Icons.person, color: Colors.white)),
-        ],
-      ),
-    );
-  }
+  final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+  final currentPath = currentLocation.split('?').first; // remove query params if any
+
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 12),
+    color: const Color(0xFF8B4C39),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildNavIcon(context, '/home', Icons.home, currentPath),
+        _buildNavIcon(context, '/categorias', Icons.category, currentPath),
+        _buildNavIcon(context, '/carrinho', Icons.shopping_cart, currentPath),
+        _buildNavIcon(context, '/perfil', Icons.person, currentPath),
+        _buildNavIcon(context, '/dashboard-admin', Icons.dashboard_customize, currentPath),
+      ],
+    ),
+    
+  );
+}
+
+Widget _buildNavIcon(BuildContext context, String route, IconData icon, String currentPath) {
+  final isActive = currentPath.startsWith(route); // match current route
+
+  return IconButton(
+    onPressed: () => context.go(route),
+    icon: Icon(
+      icon,
+      color: isActive ? Colors.yellowAccent : Colors.white, // highlight active
+      size: isActive ? 30 : 26,
+    ),
+    tooltip: route.replaceAll('/', '').toUpperCase(),
+  );
+}
 }

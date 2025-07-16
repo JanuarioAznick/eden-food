@@ -7,7 +7,7 @@ class UsuarioService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // 📝 Registro de usuário
-  Future<UserModel> registrarUsuario(String email, String senha, String role) async {
+  Future<UserModel> registrarUsuario(String email, String senha, String role, String name, String phone) async {
     final userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
     final uid = userCredential.user!.uid;
 
@@ -15,6 +15,8 @@ class UsuarioService {
       uid: uid,
       email: email,
       role: role,
+      name: name,
+      phone: phone,
       senha: senha, // ⚠️ apenas se estiveres usando a senha na model
     );
 

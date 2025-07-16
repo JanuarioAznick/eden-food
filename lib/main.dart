@@ -2,7 +2,9 @@ import 'package:eden_food/home.dart';
 import 'package:eden_food/models/product.dart';
 import 'package:eden_food/pages/admin_dashboard_page.dart';
 import 'package:eden_food/pages/cadastro_produto_page.dart';
+import 'package:eden_food/pages/cart_page.dart';
 import 'package:eden_food/pages/category_page.dart';
+import 'package:eden_food/pages/editar_page.dart';
 import 'package:eden_food/pages/listagem_produtos_page.dart';
 import 'package:eden_food/pages/product_details_page.dart';
 import 'package:eden_food/pages/product_page.dart';
@@ -62,6 +64,7 @@ class EdenApp extends StatelessWidget {
           path: '/cadastro-produto',
           builder: (context, state) => const NewProductPage(),
         ),
+       
         GoRoute(
           path: '/produtos',
           builder: (context, state) => const ProductListPage(),
@@ -77,10 +80,18 @@ class EdenApp extends StatelessWidget {
             }
             return ProductDetailsPage(produto: product);
           },
-        )
-,
-
-
+        ),
+        GoRoute(
+          path: '/editar-conta',
+          builder: (context, state) {
+            final dados = state.extra as Map<String, dynamic>;
+            return EditarContaPage(dados: dados);
+          },
+        ),
+        GoRoute(
+          path: '/carrinho',
+          builder: (context, state) => const CartPage(carrinho: [],),
+        ),
         GoRoute(
           path: '/',
           builder: (context, state) => const HomePage(),

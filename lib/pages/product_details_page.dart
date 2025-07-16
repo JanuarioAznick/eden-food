@@ -119,8 +119,8 @@ class ProductDetailsPage extends StatelessWidget {
                         // lógica do carrinho
                         Navigator.pop(context); // ou adiciona e volta
                       },
-                      icon: const Icon(Icons.add_shopping_cart),
-                      label: const Text("Adicionar ao carrinho"),
+                      icon: const Icon(Icons.add_shopping_cart, color: Colors.white),
+                      label: const Text("Adicionar ao carrinho", style: TextStyle(color: Colors.white)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF8B4C39),
                         padding: const EdgeInsets.symmetric(
@@ -139,6 +139,43 @@ class ProductDetailsPage extends StatelessWidget {
           ),
         ),
       ),
+       bottomNavigationBar: _buildFooter(context),
     );
   }
 }
+ 
+ 
+Widget _buildFooter(BuildContext context) {
+  final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+  final currentPath = currentLocation.split('?').first; // remove query params if any
+
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 12),
+    color: const Color(0xFF8B4C39),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildNavIcon(context, '/home', Icons.home, currentPath),
+        _buildNavIcon(context, '/categorias', Icons.category, currentPath),
+        _buildNavIcon(context, '/carrinho', Icons.shopping_cart, currentPath),
+        _buildNavIcon(context, '/perfil', Icons.person, currentPath),
+        _buildNavIcon(context, '/admin-dashboard', Icons.dashboard_customize, currentPath),
+      ],
+    ),
+  );
+}
+
+Widget _buildNavIcon(BuildContext context, String route, IconData icon, String currentPath) {
+  final isActive = currentPath.startsWith(route); // match current route
+
+  return IconButton(
+    onPressed: () => context.go(route),
+    icon: Icon(
+      icon,
+      color: isActive ? Colors.yellowAccent : Colors.white, // highlight active
+      size: isActive ? 30 : 26,
+    ),
+    tooltip: route.replaceAll('/', '').toUpperCase(),
+  );
+}
+

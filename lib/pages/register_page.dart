@@ -20,6 +20,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   String _perfilSelecionado = 'cliente'; // valor padrão
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   bool _isLoading = false;
   final auth = FirebaseAuth.instance;
@@ -29,13 +31,15 @@ class _RegisterPageState extends State<RegisterPage> {
   void _registrarUsuario() async {
     final email = _emailController.text.trim();
     final senha = _senhaController.text.trim();
+    final name = _nameController.text.trim();
+    final phone = _phoneController.text.trim(); 
 
     if (email.isEmpty || senha.isEmpty) return;
 
     setState(() => _isLoading = true);
 
     try {
-      final usuario = await usuarioService.registrarUsuario(email, senha, _perfilSelecionado);
+      final usuario = await usuarioService.registrarUsuario(email, senha, _perfilSelecionado, name, phone);
 
       final destino = usuario.role == 'admin' ? '/admin-dashboard' : (widget.previousPath ?? '/loja');
       context.go(destino);
@@ -69,7 +73,19 @@ class _RegisterPageState extends State<RegisterPage> {
               decoration: InputDecoration(labelText: "Email"),
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 12), 
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: "Nome"),
+               keyboardType: TextInputType.name,
+            ), 
+            SizedBox(height: 12), 
+            TextField(
+              controller: _phoneController,
+              decoration: InputDecoration(labelText: "Contacto"),
+               keyboardType: TextInputType.phone,
+            ),
+            SizedBox(height: 12), 
             TextField(
               controller: _senhaController,
               decoration: InputDecoration(labelText: "Senha"),

@@ -2,6 +2,8 @@ class UserModel {
   final String uid;
   final String email;
   final String role;
+  final String name;
+  final String phone;
   final String senha; // ⚠️ usar com cuidado!
 
   UserModel({
@@ -9,6 +11,8 @@ class UserModel {
     required this.email,
     required this.role,
     required this.senha,
+    this.name = '',
+    this.phone = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -16,7 +20,9 @@ class UserModel {
       'uid': uid,
       'email': email,
       'role': role,
-      'senha': senha, // ⚠️ Evita salvar isso no Firestore em produção!
+      'senha': senha,
+      'name': name,
+      'phone': phone,
     };
   }
 
@@ -26,6 +32,8 @@ class UserModel {
       email: map['email'],
       role: map['role'],
       senha: map['senha'] ?? '',
+      name: map['name'] ?? '',
+      phone: map['phone'] ?? '',
     );
   }
 }

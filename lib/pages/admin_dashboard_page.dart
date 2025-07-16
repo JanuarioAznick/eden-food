@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
@@ -23,11 +24,34 @@ class AdminDashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 800;
+    final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Painel Administrativo"),
-        backgroundColor: Colors.deepOrange,
+        title: const Text("Painel Administrativo", style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF8B4C39),
+        iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          if (user != null)
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Text(
+                    "Olá, ${user.displayName ?? user.email}",
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    context.go('/login');
+                  },
+                ),
+              ],
+            )
+        ],
       ),
       backgroundColor: Colors.orange[50],
       body: FutureBuilder(
@@ -76,6 +100,7 @@ class AdminDashboardPage extends StatelessWidget {
           );
         },
       ),
+      bottomNavigationBar: _buildFooter(context),
     );
   }
 
@@ -100,3 +125,39 @@ class AdminDashboardPage extends StatelessWidget {
     );
   }
 }
+
+Widget _buildFooter(BuildContext context) {
+  final currentLocation = GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+  final currentPath = currentLocation.split('?').first; // remove query params if any
+
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 12),
+    color: const Color(0xFF8B4C39),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildNavIcon(context, '/home', Icons.home, currentPath),
+        _buildNavIcon(context, '/categorias', Icons.category, currentPath),
+        _buildNavIcon(context, '/carrinho', Icons.shopping_cart, currentPath),
+        _buildNavIcon(context, '/perfil', Icons.person, currentPath),
+        _buildNavIcon(context, '/admin-dashboard', Icons.dashboard_customize, currentPath),
+      ],
+    ),
+  );
+}
+
+Widget _buildNavIcon(BuildContext context, String route, IconData icon, String currentPath) {
+  final isActive = currentPath.startsWith(route); // match current route
+
+  return IconButton(
+    onPressed: () => context.go(route),
+    icon: Icon(
+      icon,
+      color: isActive ? Colors.yellowAccent : Colors.white, // highlight active
+      size: isActive ? 30 : 26,
+    ),
+    tooltip: route.replaceAll('/', '').toUpperCase(),
+  );
+}
+
+
