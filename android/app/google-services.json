@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "871817356320",
+    "project_id": "eden-food-bd",
+    "storage_bucket": "eden-food-bd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871817356320:android:11ee06f95ef348fe870845",
+        "android_client_info": {
+          "package_name": "com.example.eden_food"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXHXeTszJS1cO7uAoT88BMA2IukjMXXZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
